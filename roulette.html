@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Digital Roulette Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+    }
+    .game-box {
+      background-color: #34495e;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      width: 300px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-box">
+    <h2>Roulette Game</h2>
+    <label>Guess (0-36):</label>
+    <input type="number" id="guess" min="0" max="36" />
+
+    <label>Bet Amount ($):</label>
+    <input type="number" id="bet" min="1" />
+
+    <button onclick="playRound()">Play Round</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    let balance = 100;
+
+    function playRound() {
+      const guess = parseInt(document.getElementById('guess').value);
+      const bet = parseInt(document.getElementById('bet').value);
+      const resultDiv = document.getElementById('result');
+
+      if (isNaN(guess) || isNaN(bet) || guess < 0 || guess > 36 || bet <= 0 || bet > balance) {
+        resultDiv.innerHTML = '<p>Please enter a valid guess (0-36) and a bet amount within your balance.</p>';
+        return;
+      }
+
+      const winningNumber = Math.floor(Math.random() * 37);
+      let winnings = 0;
+
+      if (guess === winningNumber) {
+        winnings = bet * 35;
+        balance += winnings;
+      } else {
+        balance -= bet;
+      }
+
+      resultDiv.innerHTML = `
+        <p>Winning Number: <strong>${winningNumber}</strong></p>
+        <p>Your Guess: <strong>${guess}</strong></p>
+        <p>Winnings: <strong>$${winnings}</strong></p>
+        <p>Balance Left: <strong>$${balance}</strong></p>
+      `;
+    }
+  </script>
+</body>
+</html>
